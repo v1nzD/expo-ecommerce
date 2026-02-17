@@ -17,6 +17,7 @@
     "dotenv": "^17.3.1",
     "expo-ecommerce": "file:..",
     "express": "^5.2.1",
+    "inngest": "^3.52.0",
     "mongoose": "^9.2.1",
     "nodemon": "^3.1.11"
   }
