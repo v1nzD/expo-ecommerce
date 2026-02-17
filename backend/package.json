@@ -12,9 +12,12 @@
   "type": "module",
   "description": "",
   "dependencies": {
+    "@clerk/express": "^1.7.70",
+    "cloudinary": "^2.8.0",
     "dotenv": "^17.3.1",
     "expo-ecommerce": "file:..",
     "express": "^5.2.1",
+    "mongoose": "^9.2.1",
     "nodemon": "^3.1.11"
   }
 }
