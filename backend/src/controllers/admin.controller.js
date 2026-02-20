@@ -151,11 +151,11 @@ export async function updateOrderStatus(req, res) {
     }
 
     // save the updated changes in the order
-    await Order.save();
+    await order.save();
 
     res
       .status(200)
-      .json({ message: "Order status updated successfully" }, order);
+      .json({ message: "Order status updated successfully", order });
   } catch (error) {
     console.error("Error in updateOrderStatus controller:", error);
     res.status(500).json({ message: "Internal server error" });
