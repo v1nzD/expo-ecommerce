@@ -1,0 +1,77 @@
+import { Review } from "../models/review.model.js";
+import { Order } from "../models/order.model.js";
+import { Product } from "../models/product.model.js";
+
+export async function createReview(req, res) {
+  try {
+    const { productId, orderId, rating } = req.body;
+
+    if (!rating || rating < 1 || rating > 5) {
+      return res.status(400).json({ error: "Rating must be between 1 and 5" });
+    }
+
+    const user = req.user;
+
+    // verify order exists and is delivered
+    // can only review when order is delivered
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    if (order.clerkId !== user.clerkId) {
+      return res.status(403).json({ error: "Not authorized to review order" });
+    }
+
+    if (order.status !== "delivered") {
+      return res
+        .status(400)
+        .json({ error: "Can only review delivered orders" });
+    }
+
+    // allow users to review each product in the order
+    // verify if product is in order
+    const productInOrder = order.orderItems.find(
+      (item) => item.product.toString() === productId.toString(),
+    );
+
+    if (!productInOrder) {
+      return res.status(400).json({ error: "Product not found in this oder" });
+    }
+
+    // check if review already exists => user can only review product once
+    const existingReview = await Review.findOne({
+      productId,
+      userId: user._id,
+    });
+
+    if (existingReview) {
+      return res
+        .status(400)
+        .json({ error: "You have already reviewed this product" });
+    }
+
+    const review = await Review.create({
+      productId,
+      userId: user._id,
+      orderId,
+      rating,
+    });
+
+    // update product rating
+    const product = await Product.findById(productId);
+    const reviews = await Review.find({ productId });
+    const totalRating = reviews.reduce((sum, rev) => sum + rev.rating, 0);
+    product.averageRating = totalRating / reviews.length;
+    product.totalReviews = reviews.length;
+
+    await product.save();
+
+    res.status(201).json({ message: "Review submitted successfully", review });
+  } catch (error) {
+    console.error("Error in createReview", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export async function deleteReview(req, res) {}
