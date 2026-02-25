@@ -122,6 +122,27 @@ export async function updateCartItem(req, res) {
   }
 }
 
-export async function removeFromCart(req, res) {}
+export async function removeFromCart(req, res) {
+  try {
+    const { productId } = req.params;
+
+    // find user's cart
+    const clerkId = req.user.clerkId;
+    let cart = await Cart.findOne({ clerkId: clerkId });
+    if (!cart) {
+      return res.status(400).json({ error: "Cart not found" });
+    }
+
+    cart.items = cart.items.filter(
+      (item) => item.product.toString() !== productId,
+    );
+    await cart.save();
+
+    res.status(200).json({ message: "Item removed from cart", cart });
+  } catch (error) {
+    console.error("Error in removeFromCart", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
 
 export async function clearCart(req, res) {}
