@@ -10,6 +10,7 @@ export async function getCart(req, res) {
 
     // user has no products in cart yet, create a cart
     if (!cart) {
+      const user = req.user;
       cart = await Cart.create({
         user: user._id,
         clerkId: user.clerkId,
@@ -44,6 +45,7 @@ export async function addToCart(req, res) {
     let cart = await Cart.findOne({ clerkId: clerkId });
 
     if (!cart) {
+      const user = req.user;
       cart = await Cart.create({
         user: user._id,
         clerkId: user.clerkId,
