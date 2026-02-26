@@ -4,6 +4,7 @@ import { ENV } from "./config/env.js";
 import { connectDB } from "./config/db.js";
 import { clerkMiddleware } from "@clerk/express";
 import { serve } from "inngest/express";
+import cors from "cors";
 import { functions, inngest } from "./config/inngest.js";
 import adminRouter from "./routes/admin.route.js";
 import userRouter from "./routes/user.route.js";
@@ -18,6 +19,7 @@ const __dirname = path.resolve();
 
 app.use(express.json());
 app.use(clerkMiddleware()); // adds req.auth object under req
+app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
 
