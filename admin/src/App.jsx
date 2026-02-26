@@ -7,18 +7,14 @@ import ProductsPage from "./pages/ProductsPage";
 import OrdersPage from "./pages/OrdersPage";
 import CustomersPage from "./pages/CustomerPage";
 import DashboardLayout from "./layouts/DashboardLayout";
-import { LoaderIcon } from "lucide-react";
+import PageLoader from "./components/PageLoader";
 
 const App = () => {
   const { isSignedIn, isLoaded } = useAuth();
 
   // waits for clerk to load
   if (!isLoaded) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <LoaderIcon className="size-12 animate-spin" />
-      </div>
-    );
+    return <PageLoader />;
   }
   return (
     <Routes>
