@@ -1,12 +1,27 @@
 import React from "react";
 import { Outlet } from "react-router";
+import Navbar from "../components/Navbar";
+import Sidebar from "../components/Sidebar";
 
 const DashboardLayout = () => {
   return (
-    <div>
-      <h1>sidebar</h1>
-      <h1>navbar</h1>
-      <Outlet />
+    <div className="drawer lg:drawer-open">
+      <input
+        type="checkbox"
+        id="my-drawer"
+        className="drawer-toggle"
+        defaultChecked
+      />
+
+      <div className="drawer-content">
+        <Navbar />
+
+        <main className="p-6">
+          <Outlet />
+        </main>
+      </div>
+
+      <Sidebar />
     </div>
   );
 };
