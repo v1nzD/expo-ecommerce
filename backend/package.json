@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "server": "nodemon src/server.js",
-    "start": "nodemon src/server.js"
+    "start": "nodemon src/server.js",
+    "seed:products": "node src/seeds/index.js"
   },
   "keywords": [],
   "author": "",

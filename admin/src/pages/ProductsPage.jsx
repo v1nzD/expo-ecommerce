@@ -170,7 +170,9 @@ const ProductsPage = () => {
 
                       <div>
                         <p className="text-xs text-base-content/70">Stock</p>
-                        <p className="font-bold text-lg">${product.stock}</p>
+                        <p className="font-bold text-lg">
+                          {product.stock} units
+                        </p>
                       </div>
                     </div>
                   </div>
