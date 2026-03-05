@@ -24,6 +24,8 @@ const ProductsPage = () => {
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
 
+  const queryClient = useQueryClient();
+
   // default value is []
   const { data: products = [] } = useQuery({
     queryKey: ["products"],
@@ -33,14 +35,16 @@ const ProductsPage = () => {
   const createProductMutation = useMutation({
     mutationFn: productApi.create,
     onSuccess: () => {
-      // todo:
+      closeModal();
+      queryClient.invalidateQueries({ queryKey: ["products"] });
     },
   });
 
   const updateProductMutation = useMutation({
     mutationFn: productApi.update,
     onSuccess: () => {
-      // todo:
+      closeModal();
+      queryClient.invalidateQueries({ queryKey: ["products"] });
     },
   });
 
@@ -75,6 +79,11 @@ const ProductsPage = () => {
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length > 3) return alert("Maximum of 3 images allowed");
+
+    // revoke previous blob URLs to free memory
+    imagePreviews.forEach((url) => {
+      if (url.startsWith("blob:")) URL.revokeObjectURL(url);
+    });
 
     setImages(files);
     setImagePreviews(files.map((file) => URL.createObjectURL(file)));
@@ -194,6 +203,208 @@ const ProductsPage = () => {
             </div>
           );
         })}
+      </div>
+
+      {/* ADD/EDIT PRODUCT MODAL */}
+      <input type="checkbox" className="modal-toggle" checked={showModal} />
+
+      <div className="modal">
+        <div className="modal-box max-w-2xl">
+          {/* MODAL HEADER */}
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-bold text-2xl">
+              {editingProduct ? "Edit Product" : "Add New Product"}
+            </h3>
+
+            <button
+              onClick={closeModal}
+              className="btn btn-sm btn-circle btn-ghost"
+            >
+              <XIcon className="w-5 h-5" />
+            </button>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* FIRST ROW OF INPUTS */}
+            <div className="grid grid-cols-2 gap-4">
+              {/* PRODUCT NAME */}
+              <div className="form-control">
+                <label className="label">
+                  <span>Product Name</span>
+                </label>
+
+                <input
+                  type="text"
+                  placeholder="Enter product name"
+                  className="input input-bordered"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  required
+                />
+              </div>
+
+              {/* PRODUCT CATEGORY */}
+              <div className="form-control">
+                <label className="label">
+                  <span>Category</span>
+                </label>
+
+                <select
+                  className="select select-bordered"
+                  value={formData.category}
+                  onChange={(e) =>
+                    setFormData({ ...formData, category: e.target.value })
+                  }
+                  required
+                >
+                  <option value="">Select category</option>
+                  <option value="Electronics">Electronics</option>
+                  <option value="Accessories">Accessories</option>
+                  <option value="Fashion">Fashion</option>
+                  <option value="Sports">Sports</option>
+                </select>
+              </div>
+            </div>
+
+            {/* SECOND ROW OF INPUTS */}
+            <div className="grid grid-cols-2 gap-4">
+              {/* PRODUCT PRICE */}
+              <div className="form-control">
+                <label className="label">
+                  <span>Price ($)</span>
+                </label>
+
+                <input
+                  type="number"
+                  placeholder="0.00"
+                  className="input input-bordered"
+                  value={formData.price}
+                  onChange={(e) =>
+                    setFormData({ ...formData, price: e.target.value })
+                  }
+                  required
+                />
+              </div>
+
+              {/* PRODUCT STOCK */}
+              <div className="form-control">
+                <label className="label">
+                  <span>Stock</span>
+                </label>
+
+                <input
+                  type="number"
+                  placeholder="0"
+                  className="input input-bordered"
+                  value={formData.stock}
+                  onChange={(e) =>
+                    setFormData({ ...formData, stock: e.target.value })
+                  }
+                  required
+                />
+              </div>
+            </div>
+
+            {/* THIRD ROW OF INPUTS */}
+            {/* PRODUCT DESCRIPTION */}
+            <div className="form-control flex flex-col gap-2">
+              <label className="label">
+                <span>Description</span>
+              </label>
+
+              <textarea
+                placeholder="Enter product description"
+                className="textarea textarea-bordered h-24 w-full"
+                value={formData.description}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
+                required
+              />
+            </div>
+
+            {/* FOURTH ROW OF INPUTS */}
+            {/* IMAGES UPLOAD */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text font-semibold text-base flex items-center gap-2">
+                  <ImageIcon className="w-5 h-5" />
+                  Product Images
+                </span>
+                <span className="label-text-alt text-xs opacity-60">
+                  Max 3 images
+                </span>
+              </label>
+
+              <div className="bg-base-200 rounded-xl p-4 border-2 border-dashed border-base-300 hover:border-primary transition-colors">
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageChange}
+                  className="file-input file-input-bordered file-input-primary w-full"
+                  required={!editingProduct}
+                />
+
+                {editingProduct && (
+                  <p className="text-xs text-base-content/60 mt-2 text-center">
+                    Leave empty to keep current images
+                  </p>
+                )}
+              </div>
+
+              {/* IMAGE PREVIEWS */}
+              {imagePreviews.length > 0 && (
+                <div className="flex gap-2 mt-2">
+                  {imagePreviews.map((preview, index) => (
+                    <div key={index} className="avatar">
+                      <div className="w-20 rounded-lg">
+                        <img src={preview} alt={`Preview ${index + 1}`} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* MODAL BUTTONS */}
+            <div className="modal-action">
+              {/* CANCEL BUTTON */}
+              <button
+                type="button"
+                onClick={closeModal}
+                className="btn"
+                disabled={
+                  createProductMutation.isPending ||
+                  updateProductMutation.isPending
+                }
+              >
+                Cancel
+              </button>
+
+              {/* ADD/UPDATE BUTTON */}
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={
+                  createProductMutation.isPending ||
+                  updateProductMutation.isPending
+                }
+              >
+                {createProductMutation.isPending ||
+                updateProductMutation.isPending ? (
+                  <span className="loading loading-spinner"></span>
+                ) : editingProduct ? (
+                  "Update Product"
+                ) : (
+                  "Add Product"
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

@@ -12,10 +12,7 @@ export const productApi = {
   },
 
   update: async ({ id, formData }) => {
-    const { data } = await axiosInstance.post(
-      `/admin/products/${id}`,
-      formData,
-    );
+    const { data } = await axiosInstance.put(`/admin/products/${id}`, formData);
     return data;
   },
 };
