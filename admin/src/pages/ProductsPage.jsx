@@ -48,6 +48,14 @@ const ProductsPage = () => {
     },
   });
 
+  const deleteProductMutation = useMutation({
+    mutationFn: productApi.delete,
+    onSuccess: () => {
+      closeModal();
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+  });
+
   const closeModal = () => {
     // reset the modal state
     setShowModal(false);
@@ -194,8 +202,17 @@ const ProductsPage = () => {
                     >
                       <PencilIcon className="w-5 h-5" />
                     </button>
-                    <button className="btn btn-square btn-ghost text-error">
-                      <Trash2Icon className="w-5 h-5" />
+                    <button
+                      className="btn btn-square btn-ghost text-error"
+                      onClick={() =>
+                        deleteProductMutation.mutate({ id: product._id })
+                      }
+                    >
+                      {deleteProductMutation.isPending ? (
+                        <span className="loading loading-spinner"></span>
+                      ) : (
+                        <Trash2Icon className="w-5 h-5" />
+                      )}
                     </button>
                   </div>
                 </div>
