@@ -3,8 +3,7 @@ import React from "react";
 
 const LoginPage = () => {
   return (
-    <div>
-      LoginPage
+    <div className="h-screen flex justify-center items-center">
       <SignIn />
     </div>
   );
