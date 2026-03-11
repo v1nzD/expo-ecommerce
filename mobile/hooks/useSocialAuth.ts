@@ -12,7 +12,7 @@ function useSocialAuth() {
     try {
       const { createdSessionId, setActive } = await startSSOFlow({ strategy });
       if (createdSessionId && setActive) {
-        // authenticates user
+        // activates the session and authenticates user when user logs in
         await setActive({ session: createdSessionId });
       }
     } catch (error) {
