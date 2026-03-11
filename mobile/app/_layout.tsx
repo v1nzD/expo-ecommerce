@@ -12,7 +12,7 @@ export default function RootLayout() {
   return (
     <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
       <QueryClientProvider client={queryClient}>
-        <Stack screenOptions={{ headerShown: false }} />;
+        <Stack screenOptions={{ headerShown: false }} />
       </QueryClientProvider>
     </ClerkProvider>
   );
