@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 
 const AuthScreen = () => {
   return (
-    <View>
+    <View className="flex-1 justify-center">
       <Text>index</Text>
     </View>
   );
