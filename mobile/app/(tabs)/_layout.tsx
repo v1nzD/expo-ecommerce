@@ -1,9 +1,10 @@
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import { Redirect, Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@clerk/expo";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { BlurView } from "expo-blur";
 
 const TabsLayout = () => {
   const { isSignedIn, isLoaded } = useAuth();
@@ -29,6 +30,13 @@ const TabsLayout = () => {
           borderRadius: 24,
           overflow: "hidden",
         },
+        tabBarBackground: () => (
+          <BlurView
+            intensity={80}
+            tint="dark"
+            style={StyleSheet.absoluteFill}
+          />
+        ),
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: 600,
