@@ -8,7 +8,9 @@ import {
 } from "react-native";
 import SafeScreen from "@/components/SafeScreen";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import ProductsGrid from "@/components/ProductsGrid";
+import useProducts from "@/hooks/useProducts";
 
 const CATEGORIES = [
   { name: "All", icon: "grid-outline" as const },
@@ -22,6 +24,29 @@ const ShopScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
+  const { data: products, isLoading, isError } = useProducts();
+
+  const filteredProducts = useMemo(() => {
+    if (!products) return [];
+
+    let filtered = products;
+
+    // filter by category
+    if (selectedCategory !== "All") {
+      filtered = filtered.filter(
+        (product) => product.category === selectedCategory,
+      );
+    }
+
+    // filter by search query
+    if (searchQuery.trim()) {
+      filtered = filtered.filter((product) => {
+        product.name.toLowerCase().includes(searchQuery.toLowerCase());
+      });
+    }
+
+    return filtered;
+  }, [products, selectedCategory, searchQuery]);
   return (
     <SafeScreen>
       <ScrollView
@@ -94,6 +119,24 @@ const ShopScreen = () => {
               );
             })}
           </ScrollView>
+        </View>
+
+        <View className="mb-6 px-6">
+          <View className="flex-row items-center justify-between mb-4">
+            <Text className="text-text-primary text-lg font-bold">
+              Products
+            </Text>
+            <Text className="text-text-secondary text-sm">
+              {filteredProducts.length} items
+            </Text>
+          </View>
+
+          {/* PRODUCTS GRID */}
+          <ProductsGrid
+            products={filteredProducts}
+            isLoading={isLoading}
+            isError={isError}
+          />
         </View>
       </ScrollView>
     </SafeScreen>
