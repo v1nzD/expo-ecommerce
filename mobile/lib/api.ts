@@ -2,7 +2,8 @@ import axios from "axios";
 import { useAuth } from "@clerk/expo";
 import { useEffect } from "react";
 
-const API_URL = "http://localhost:3000/api";
+// const API_URL = "http://localhost:3000/api";
+const API_URL = "https://expo-ecommerce-c90pn.sevalla.app/api";
 
 const api = axios.create({
   baseURL: API_URL,
