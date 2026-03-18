@@ -1,0 +1,39 @@
+import axios from "axios";
+import { useAuth } from "@clerk/expo";
+import { useEffect } from "react";
+
+// const API_URL = "http://localhost:3000/api";
+const API_URL = "https://expo-ecommerce-c90pn.sevalla.app/api";
+
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+export const useApi = () => {
+  const { getToken } = useAuth();
+
+  useEffect(() => {
+    const interceptor = api.interceptors.request.use(async (config) => {
+      const token = await getToken();
+
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+
+      return config;
+    });
+
+    // clean up: remove interceptor when component unmounts
+    return () => {
+      api.interceptors.request.eject(interceptor);
+    };
+  }, [getToken]);
+
+  return api;
+};
+
+// include auth token in every req so that backend knows user is authenticated
+// we're including the auth token in the auth headers

@@ -16,11 +16,11 @@ userRouter.use(protectRoute);
 
 userRouter.post("/addresses", addAddress);
 userRouter.get("/addresses", getAddresses);
-userRouter.put("/addresses:addressId", updateAddress);
-userRouter.delete("/addresses:addressId", deleteAddress);
+userRouter.put("/addresses/:addressId", updateAddress);
+userRouter.delete("/addresses/:addressId", deleteAddress);
 
 userRouter.post("/wishlist", addToWishList);
-userRouter.delete("/wishlist:productId", removeFromWishList);
+userRouter.delete("/wishlist/:productId", removeFromWishList);
 userRouter.get("/wishlist", getWishlist);
 
 export default userRouter;
