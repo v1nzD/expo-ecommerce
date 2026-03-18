@@ -24,7 +24,7 @@ const useWishlist = () => {
   const addToWishlistMutation = useMutation({
     mutationFn: async (productId: string) => {
       const { data } = await api.post<{ wishlist: string[] }>(
-        "users/wishlist",
+        "/users/wishlist",
         { productId },
       );
       return data.wishlist;
