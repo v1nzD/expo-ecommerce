@@ -44,7 +44,7 @@ const ProfileScreen = () => {
     if (action === "/profile") return; // edit profile not included yet
 
     // else scenario:
-    // router.push(action); // redirect user to the page
+    router.push(action); // redirect user to the page
   };
   return (
     <SafeScreen>
