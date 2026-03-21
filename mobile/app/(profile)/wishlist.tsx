@@ -151,7 +151,7 @@ const WishlistScreen = () => {
                     }
                     disabled={isRemovingFromWishlist}
                   >
-                    <Ionicons name="trash-outline" size={50} color="#EF4444" />
+                    <Ionicons name="trash-outline" size={20} color="#EF4444" />
                   </TouchableOpacity>
                 </View>
 
