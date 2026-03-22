@@ -63,6 +63,18 @@ const useAddresses = () => {
       queryClient.invalidateQueries({ queryKey: ["addresses"] });
     },
   });
+
+  return {
+    addresses: addresses || [],
+    isLoading,
+    isError,
+    addAddress: addAddressMutation.mutate,
+    updateAddress: updateAddressMutation.mutate,
+    deleteAddress: deleteAddressMutation.mutate,
+    isAddingAddress: addAddressMutation.isPending,
+    isUpdatingAddress: updateAddressMutation.isPending,
+    isDeletingAddress: deleteAddressMutation.isPending,
+  };
 };
 
 export default useAddresses;
