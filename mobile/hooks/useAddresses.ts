@@ -54,7 +54,9 @@ const useAddresses = () => {
 
   const deleteAddressMutation = useMutation({
     mutationFn: async (addressId: string) => {
-      const { data } = await api.delete(`/users/addresses/${addressId}`);
+      const { data } = await api.delete<{ addresses: Address[] }>(
+        `/users/addresses/${addressId}`,
+      );
       return data.addresses;
     },
     onSuccess: () => {
