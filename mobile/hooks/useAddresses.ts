@@ -32,6 +32,35 @@ const useAddresses = () => {
       queryClient.invalidateQueries({ queryKey: ["addresses"] });
     },
   });
+
+  const updateAddressMutation = useMutation({
+    mutationFn: async ({
+      addressId,
+      addressData,
+    }: {
+      addressId: string;
+      addressData: Partial<Address>;
+    }) => {
+      const { data } = await api.put<{ addresses: Address[] }>(
+        `/users/addresses/${addressId}`,
+        addressData,
+      );
+      return data.addresses;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["addresses"] });
+    },
+  });
+
+  const deleteAddressMutation = useMutation({
+    mutationFn: async (addressId: string) => {
+      const { data } = await api.delete(`/users/addresses/${addressId}`);
+      return data.addresses;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["addresses"] });
+    },
+  });
 };
 
 export default useAddresses;
