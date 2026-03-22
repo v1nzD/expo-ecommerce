@@ -264,6 +264,44 @@ const PrivacyScreen = () => {
             </TouchableOpacity>
           ))}
         </View>
+
+        {/* DELETE ACCOUNT BTN */}
+        <View className="px-6 pt-4">
+          <TouchableOpacity
+            className="bg-surface rounded-2xl p-5 flex-row items-center justify-between border-2 border-red-500/20"
+            activeOpacity={0.7}
+          >
+            <View className="flex-row items-center">
+              <View className="bg-red-500/20 rounded-full w-12 h-12 items-center justify-center mr-4">
+                <Ionicons name="trash-outline" size={24} color="#EF4444" />
+              </View>
+              <View>
+                <Text className="text-red-500 font-bold text-base mb-1">
+                  Delete Account
+                </Text>
+                <Text className="text-text-secondary text-sm">
+                  Permanently delete your account
+                </Text>
+              </View>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color="#EF4444" />
+          </TouchableOpacity>
+        </View>
+
+        {/* INFO ALERT */}
+        <View className="px-6 pt-6 pb-4">
+          <View className="bg-primary/10 rounded-2xl p-4 flex-row">
+            <Ionicons
+              name="information-circle-outline"
+              size={24}
+              color="#1DB954"
+            />
+            <Text className="text-text-secondary text-sm ml-3 flex-1">
+              We take your privacy seriously. Your data is encrypted and stored
+              securely. You can manage your privacy settings at any time.
+            </Text>
+          </View>
+        </View>
       </ScrollView>
     </SafeScreen>
   );
