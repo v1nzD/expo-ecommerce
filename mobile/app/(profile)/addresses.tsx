@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import SafeScreen from "@/components/SafeScreen";
@@ -13,6 +14,7 @@ import useAddresses from "@/hooks/useAddresses";
 import AddressesHeader from "@/components/AddressesHeader";
 import { Address } from "@/types";
 import AddressFormModal from "@/components/AddressFormModal";
+import AddressCard from "@/components/AddressCard";
 
 const AddressesScreen = () => {
   const {
@@ -165,7 +167,37 @@ const AddressesScreen = () => {
           </TouchableOpacity>
         </View>
       ) : (
-        <Text>You have some addresses</Text>
+        <ScrollView
+          className="flex-1"
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        >
+          <View className="px-6 py-4">
+            {addresses.map((address) => (
+              <AddressCard
+                key={address._id}
+                address={address}
+                onEdit={handleEditAddress}
+                onDelete={handleDeleteAddress}
+                isUpdatingAddress={isUpdatingAddress}
+                isDeletingAddress={isDeletingAddress}
+              />
+            ))}
+
+            <TouchableOpacity
+              className="bg-primary rounded-2xl items-center mt-2 py-4"
+              activeOpacity={0.8}
+              onPress={handleAddAddress}
+            >
+              <View className="flex-row items-center">
+                <Ionicons name="add-circle-outline" size={24} color="#121212" />
+                <Text className="text-background font-bold text-base ml-2">
+                  Add New Address
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       )}
 
       <AddressFormModal
