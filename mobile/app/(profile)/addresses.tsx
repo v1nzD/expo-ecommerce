@@ -12,6 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import useAddresses from "@/hooks/useAddresses";
 import AddressesHeader from "@/components/AddressesHeader";
 import { Address } from "@/types";
+import AddressFormModal from "@/components/AddressFormModal";
 
 const AddressesScreen = () => {
   const {
@@ -146,7 +147,7 @@ const AddressesScreen = () => {
       {/* USER HAS NO ADDRESS */}
       {addresses.length === 0 ? (
         <View className="flex-1 items-center justify-center px-6">
-          <Ionicons name="location-outline" size={80} />
+          <Ionicons name="location-outline" size={80} color="#666" />
           <Text className="text-text-primary font-semibold text-xl mt-4">
             No addresses yet
           </Text>
@@ -154,7 +155,7 @@ const AddressesScreen = () => {
             Add your first address
           </Text>
           <TouchableOpacity
-            className="bg-primary rounded-2xl px- py-4 mt-6"
+            className="bg-primary rounded-2xl px-8 py-4 mt-6"
             activeOpacity={0.8}
             onPress={handleAddAddress}
           >
@@ -166,6 +167,17 @@ const AddressesScreen = () => {
       ) : (
         <Text>You have some addresses</Text>
       )}
+
+      <AddressFormModal
+        visible={showAddressForm}
+        isEditing={!!editingAddressId}
+        addressForm={addressForm}
+        isAddingAddress={isAddingAddress}
+        isUpdatingAddress={isUpdatingAddress}
+        onClose={handleCloseAddressForm}
+        onSave={handleSaveAddress}
+        onFormChange={setAddressForm}
+      />
     </SafeScreen>
   );
 };
