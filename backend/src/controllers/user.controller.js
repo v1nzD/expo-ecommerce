@@ -15,7 +15,7 @@ export async function addAddress(req, res) {
 
     const user = req.user;
 
-    if (!fullName || !streetAddress || !city || !state || zipCode) {
+    if (!fullName || !streetAddress || !city || !state || !zipCode) {
       return res.status(400).json({ error: "Missing required field" });
     }
 
