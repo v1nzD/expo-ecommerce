@@ -73,7 +73,7 @@ export async function updateAddress(req, res) {
     const { addressId } = req.params;
 
     const user = req.user;
-    const address = user.adresses.id(addressId);
+    const address = user.addresses.id(addressId);
     if (!address) {
       res.status(404).json({ error: "Address not found" });
     }
