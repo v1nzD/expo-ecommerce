@@ -139,7 +139,7 @@ const AddressesScreen = () => {
 
   // todo: create reusable components for loading and error states
   if (isLoading) return <LoadingUI />;
-  if (isError) return <LoadingUI />;
+  if (isError) return <ErrorUI />;
 
   return (
     <SafeScreen>
