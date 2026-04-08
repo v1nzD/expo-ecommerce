@@ -4,6 +4,8 @@ import {
   Alert,
   TouchableOpacity,
   ActivityIndicator,
+  ScrollView,
+  Dimensions,
 } from "react-native";
 import React, { useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
@@ -12,10 +14,13 @@ import useCart from "@/hooks/useCart";
 import useWishlist from "@/hooks/useWishlist";
 import SafeScreen from "@/components/SafeScreen";
 import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
+
+const { width } = Dimensions.get("window");
 
 const ProductDetailsScreen = () => {
-  const { id } = useLocalSearchParams();
-  const { data: product, isLoading, isError } = useProduct(id as string);
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const { data: product, isLoading, isError } = useProduct(id);
   const { addToCart, isAddingToCart } = useCart();
 
   const {
@@ -78,6 +83,204 @@ const ProductDetailsScreen = () => {
             />
           )}
         </TouchableOpacity>
+      </View>
+
+      {/* PRODUCT DETAILS */}
+      <ScrollView
+        className="flex-1"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 100 }}
+      >
+        {/* IMAGE GALLERY */}
+        <View className="relative">
+          <ScrollView
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            onScroll={(e) => {
+              const index = Math.round(e.nativeEvent.contentOffset.x / width);
+              setSelectedImageIndex(index);
+            }}
+          >
+            {product.images.map((image: string, index: number) => (
+              <View key={index} style={{ width }}>
+                <Image
+                  source={image}
+                  style={{ width, height: 400 }}
+                  contentFit="cover"
+                />
+              </View>
+            ))}
+          </ScrollView>
+
+          {/* IMAGE INDICATORS */}
+          <View className="absolute bottom-4 left-0 right-0 flex-row justify-center gap-2">
+            {product.images.map((_: any, index: number) => (
+              <View
+                key={index}
+                className={`h-2 rounded-full ${
+                  index === selectedImageIndex
+                    ? "bg-primary w-6"
+                    : "bg-white/50 w-2"
+                }`}
+              ></View>
+            ))}
+          </View>
+        </View>
+
+        {/* PRODUCT INFO */}
+        <View className="p-6">
+          {/* CATEGORY */}
+          <View className="flex-row items-center mb-3">
+            <View className="bg-primary/20 px-3 py-1 rounded-full">
+              <Text className="text-primary text-xs font-bold">
+                {product.category}
+              </Text>
+            </View>
+          </View>
+
+          {/* PRODUCT NAME */}
+          <Text className="text-text-primary text-3xl font-bold mb-3">
+            {product.name}
+          </Text>
+
+          {/* PRODUCT RATING & REVIEWS */}
+          <View className="flex-row items-center mb-4">
+            <View className="flex-row items-center bg-surface px-3 py-2 rounded-full">
+              <Ionicons name="star" size={16} color="#FFC107" />
+              <Text className="text-text-primary font-bold ml-1 mr-2">
+                {product.averageRating.toFixed(1)}
+              </Text>
+
+              <Text className="text-text-secondary text-sm">
+                ({product.totalReviews} reviews)
+              </Text>
+            </View>
+
+            {inStock ? (
+              <View className="ml-3 flex-row items-center">
+                <View className="w-2 h-2 bg-green-500 rounded-full mr-2" />
+                <Text className="text-green-500 font-semibold text-sm">
+                  {product.stock} in stock
+                </Text>
+              </View>
+            ) : (
+              <View className="ml-3 flex-row items-center">
+                <View className="w-2 h-2 bg-red-500 rounded-full mr-2" />
+                <Text className="text-red-500 font-semibold text-sm">
+                  Out of stock
+                </Text>
+              </View>
+            )}
+          </View>
+
+          {/* PRODUCT PRICE */}
+          <View className="flex-row items-center mb-6">
+            <Text className="text-primary text-4xl font-bold">
+              ${product.price.toFixed(2)}
+            </Text>
+          </View>
+
+          {/* PRODUCT QUANTITY */}
+          <View className="mb-6">
+            <Text className="text-text-primary text-lg font-semibold mb-3">
+              Quantity
+            </Text>
+
+            <View className="flex-row items-center">
+              <TouchableOpacity
+                className="bg-surface rounded-full w-12 h-12 items-center justify-center"
+                onPress={() => setQuantity(Math.max(1, quantity - 1))}
+                activeOpacity={0.7}
+                disabled={!inStock}
+              >
+                <Ionicons
+                  name="remove"
+                  size={24}
+                  color={inStock ? "#FFFFFF" : "#666"}
+                />
+              </TouchableOpacity>
+
+              <Text className="text-text-primary text-xl font-semibold mx-6">
+                {quantity}
+              </Text>
+
+              <TouchableOpacity
+                className="bg-primary rounded-full w-12 h-12 items-center justify-center"
+                onPress={() =>
+                  setQuantity(Math.min(product.stock, quantity + 1))
+                }
+                activeOpacity={0.7}
+                disabled={!inStock || quantity >= product.stock}
+              >
+                <Ionicons
+                  name="add"
+                  size={24}
+                  color={
+                    !inStock || quantity >= product.stock ? "#666" : "#121212"
+                  }
+                />
+              </TouchableOpacity>
+            </View>
+
+            {quantity >= product.stock && inStock && (
+              <Text className="text-orange-500 text-sm mt-2">
+                Maximum stock reached
+              </Text>
+            )}
+          </View>
+
+          {/* PRODUCT DESCRIPTION */}
+          <View className="mb-8">
+            <Text className="text-text-primary text-lg font-bold mb-3">
+              Description
+            </Text>
+            <Text className="text-text-secondary text-base leading-6">
+              {product.description}
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+
+      {/* BOTTOM ACTION BAR */}
+      <View className="absolute bottom-0 left-0 right-0 bg-background/95 backdrop-blur-xl border-t border-surface px-6 py-4 pb-8">
+        <View className="flex-row items-center gap-3">
+          <View className="flex-1">
+            <Text className="text-text-secondary text-sm mb-1">
+              Total Price
+            </Text>
+            <Text className="text-primary text-2xl font-bold">
+              ${(product.price * quantity).toFixed(2)}
+            </Text>
+          </View>
+          <TouchableOpacity
+            className={`rounded-2xl px-8 py-4 flex-row items-center ${
+              !inStock ? "bg-surface" : "bg-primary"
+            }`}
+            activeOpacity={0.8}
+            onPress={handleAddToCart}
+            disabled={!inStock || isAddingToCart}
+          >
+            {isAddingToCart ? (
+              <ActivityIndicator size="small" color="#121212" />
+            ) : (
+              <>
+                <Ionicons
+                  name="cart"
+                  size={24}
+                  color={!inStock ? "#666" : "#121212"}
+                />
+                <Text
+                  className={`font-bold text-lg ml-2 ${
+                    !inStock ? "text-text-secondary" : "text-background"
+                  }`}
+                >
+                  {!inStock ? "Out of Stock" : "Add to Cart"}
+                </Text>
+              </>
+            )}
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeScreen>
   );
