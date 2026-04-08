@@ -88,7 +88,6 @@ export async function createPaymentIntent(req, res) {
         shippingAddress: JSON.stringify(shippingAddress),
         totalPrice: total.toFixed(2),
       },
-      // in the webhooks section we will use this metadata
     });
 
     res.status(200).json({ clientSecret: paymentIntent.client_secret });
