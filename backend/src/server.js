@@ -12,6 +12,7 @@ import orderRouter from "./routes/order.route.js";
 import reviewRouter from "./routes/review.route.js";
 import productRouter from "./routes/product.route.js";
 import cartRouter from "./routes/cart.route.js";
+import paymentRouter from "./routes/payment.route.js";
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use("/api/orders", orderRouter);
 app.use("/api/reviews", reviewRouter);
 app.use("/api/products", productRouter);
 app.use("/api/cart", cartRouter);
+app.use("/api/payment", paymentRouter);
 
 app.get("/api/health", (req, res) => {
   res.status(200).json({ message: "Success" });
