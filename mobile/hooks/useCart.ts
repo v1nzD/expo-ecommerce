@@ -52,7 +52,7 @@ const useCart = () => {
   });
 
   const removeFromCartMutation = useMutation({
-    mutationFn: async ({ productId }: { productId: string }) => {
+    mutationFn: async (productId: string) => {
       const { data } = await api.delete<{ cart: Cart }>(`/cart/${productId}`);
       return data.cart;
     },
