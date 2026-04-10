@@ -23,7 +23,7 @@ const TabsLayout = () => {
           position: "absolute",
           backgroundColor: "transparent",
           borderTopWidth: 0,
-          height: 50 + insets.bottom,
+          height: 32 + insets.bottom,
           paddingTop: 4,
           marginHorizontal: 100,
           marginBottom: insets.bottom,

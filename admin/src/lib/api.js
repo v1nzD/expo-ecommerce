@@ -33,6 +33,7 @@ export const orderApi = {
       `/admin/orders/${orderId}/status`,
       { status },
     );
+    return data;
   },
 };
 
