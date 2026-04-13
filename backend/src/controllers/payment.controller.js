@@ -284,22 +284,9 @@ export async function handleWebhook(req, res) {
 
   if (event.type === "payment_intent.succeeded") {
     const paymentIntent = event.data.object;
-
     console.log("Payment succeeded:", paymentIntent.id);
 
     try {
-      const { userId, clerkId, totalPrice } = paymentIntent.metadata;
-
-      // Check if order already exists (prevent duplicates)
-      const existingOrder = await Order.findOne({
-        "paymentResult.id": paymentIntent.id,
-      });
-      if (existingOrder) {
-        console.log("Order already exists for payment:", paymentIntent.id);
-        return res.json({ received: true });
-      }
-
-      // Retrieve the order based on userId or payment intent id
       const order = await Order.findOne({
         "paymentResult.id": paymentIntent.id,
       });
@@ -308,20 +295,25 @@ export async function handleWebhook(req, res) {
         throw new Error("Order not found");
       }
 
-      // Update order status to "completed"
+      if (order.paymentResult.status === "succeeded") {
+        console.log("Order already processed:", order._id);
+        return res.json({ received: true });
+      }
+
       order.paymentResult.status = "succeeded";
       await order.save();
 
-      // Update product stock
       for (const item of order.orderItems) {
         await Product.findByIdAndUpdate(item.product, {
           $inc: { stock: -item.quantity },
         });
       }
 
-      console.log("Order created successfully:", order._id);
+      await Cart.findOneAndDelete({ user: order.user });
+
+      console.log("Order fulfilled:", order._id);
     } catch (error) {
-      console.error("Error creating order from webhook:", error);
+      console.error("Error fulfilling order from webhook:", error);
     }
   }
 

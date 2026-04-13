@@ -43,7 +43,7 @@ const shippingAddressSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  zipcode: {
+  zipCode: {
     type: String,
     required: true,
   },
@@ -93,4 +93,4 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export const Order = mongoose.model("Order", orderSchema)
+export const Order = mongoose.model("Order", orderSchema);
