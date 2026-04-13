@@ -12,6 +12,8 @@ export async function createPaymentIntent(req, res) {
     const { cartItems, shippingAddress } = req.body;
     const user = req.user;
 
+    console.log("USER:", user);
+
     // Validate cart items
     if (!cartItems || cartItems.length === 0) {
       return res.status(400).json({ error: "Cart is empty" });
@@ -56,6 +58,7 @@ export async function createPaymentIntent(req, res) {
     // find or create the stripe customer
     let customer;
     if (user.stripeCustomerId) {
+      console.log("Stripe Customer ID:", user.stripeCustomerId);
       // find the customer
       customer = await stripe.customers.retrieve(user.stripeCustomerId);
     } else {
