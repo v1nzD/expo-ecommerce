@@ -26,7 +26,7 @@ app.use(
     if (req.originalUrl === "/api/payment/webhook") {
       express.raw({ type: "application/json" })(req, res, next);
     } else {
-      express.json()(req, res, res, next);
+      express.json()(req, res, next);
     }
   },
   paymentRouter,
