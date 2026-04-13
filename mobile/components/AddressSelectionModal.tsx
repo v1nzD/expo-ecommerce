@@ -36,7 +36,7 @@ const AddressSelectionModal = ({
     >
       <View className="flex-1 bg-black/50 justify-end">
         <View className="bg-background rounded-t-3xl h-1/2">
-          {/* Modal Header */}
+          {/* MODAL HEADER */}
           <View className="flex-row items-center justify-between p-6 border-b border-surface">
             <Text className="text-text-primary text-2xl font-bold">
               Select Address
