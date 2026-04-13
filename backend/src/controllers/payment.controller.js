@@ -87,8 +87,6 @@ export async function createPaymentIntent(req, res) {
       metadata: {
         clerkId: user.clerkId,
         userId: user._id.toString(),
-        orderItems: JSON.stringify(validatedItems),
-        shippingAddress: JSON.stringify(shippingAddress),
         totalPrice: total.toFixed(2),
       },
     });
@@ -121,8 +119,7 @@ export async function handleWebhook(req, res) {
     console.log("Payment succeeded:", paymentIntent.id);
 
     try {
-      const { userId, clerkId, orderItems, shippingAddress, totalPrice } =
-        paymentIntent.metadata;
+      const { userId, clerkId, totalPrice } = paymentIntent.metadata;
 
       // Check if order already exists (prevent duplicates)
       const existingOrder = await Order.findOne({
