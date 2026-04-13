@@ -20,7 +20,10 @@ import AddressSelectionModal from "@/components/AddressSelectionModal";
 
 import * as Sentry from "@sentry/react-native";
 
+import { useQueryClient } from "@tanstack/react-query";
+
 const CartScreen = () => {
+  const queryClient = useQueryClient();
   const api = useApi();
   const {
     cart,
@@ -156,8 +159,16 @@ const CartScreen = () => {
           [{ text: "OK", onPress: () => {} }],
         );
 
-        // clear cart if payment is successful
-        clearCart();
+        try {
+          await clearCart();
+        } catch (e: any) {
+          // Cart already deleted by webhook, just invalidate the query
+          if (e?.response?.status === 404) {
+            queryClient.invalidateQueries({ queryKey: ["cart"] });
+          } else {
+            console.log("Failed to clear cart:", e);
+          }
+        }
       }
     } catch (error) {
       Sentry.logger.error("Payment failed", {
