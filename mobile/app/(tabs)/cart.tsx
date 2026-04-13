@@ -166,6 +166,8 @@ const CartScreen = () => {
         itemCount: cartItems.length,
       });
 
+      console.log(error);
+
       Alert.alert("Error", "Failed to process payment.");
     } finally {
       setPaymentLoading(false);
@@ -222,7 +224,7 @@ const CartScreen = () => {
                       <Text className="text-primary font-bold text-2xl">
                         ${(item.product.price * item.quantity).toFixed(2)}
                       </Text>
-                      <Text className="text-primary font-bold text-2xl">
+                      <Text className="text-text-secondary text-sm ml-2">
                         ${item.product.price.toFixed(2)} each
                       </Text>
                     </View>
@@ -322,7 +324,7 @@ const CartScreen = () => {
         <TouchableOpacity
           className="bg-primary rounded-2xl overflow-hidden"
           activeOpacity={0.9}
-          onPress={() => handleCheckout}
+          onPress={handleCheckout}
           disabled={paymentLoading}
         >
           <View className="py-5 flex-row items-center justify-center">
