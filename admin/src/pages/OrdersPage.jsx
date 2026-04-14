@@ -18,8 +18,8 @@ const OrdersPage = () => {
     },
   });
 
-  const handleStatusChange = (orderId, newStatus) => {
-    updateMutationStatus.mutate({ orderId, newStatus });
+  const handleStatusChange = (orderId, status) => {
+    updateMutationStatus.mutate({ orderId, status });
   };
 
   const orders = ordersData?.orders || [];
@@ -117,7 +117,7 @@ const OrdersPage = () => {
                             disabled={updateMutationStatus.isPending}
                           >
                             <option value="pending">Pending</option>
-                            <option value="shipping">Shipped</option>
+                            <option value="shipped">Shipped</option>
                             <option value="delivered">Delivered</option>
                           </select>
                         </td>
