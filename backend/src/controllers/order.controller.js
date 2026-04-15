@@ -2,6 +2,7 @@ import { Product } from "../models/product.model.js";
 import { Order } from "../models/order.model.js";
 import { Review } from "../models/review.model.js";
 
+// not used, orders are created in stripe webhook instead
 export async function createOrder(req, res) {
   try {
     const user = req.user;
