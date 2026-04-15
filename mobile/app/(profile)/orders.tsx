@@ -16,6 +16,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { capitalizeFirstLetter, formatDate, getStatusColor } from "@/lib/utils";
 import RatingModal from "@/components/RatingModal";
+import LoadingState from "@/components/LoadingState";
+import { ErrorState } from "@/components/ErrorState";
+import { EmptyState } from "@/components/EmptyState";
 
 const OrdersScreen = () => {
   const { data: orders, isLoading, isError } = useOrders();
@@ -89,11 +92,18 @@ const OrdersScreen = () => {
       </View>
 
       {isLoading ? (
-        <LoadingUI />
+        <LoadingState message="Loading orders..." />
       ) : isError ? (
-        <ErrorUI />
+        <ErrorState
+          title="Failed to load orders"
+          description="Please check your connection and try again"
+        />
       ) : !orders || orders.length === 0 ? (
-        <EmptyUI />
+        <EmptyState
+          icon="receipt-outline"
+          title="No orders yet"
+          description="Your orders will appear here"
+        />
       ) : (
         <ScrollView
           className="flex-1"
@@ -139,13 +149,15 @@ const OrdersScreen = () => {
                         {formatDate(order.createdAt)}
                       </Text>
 
-                      <View className="self-start px-3 py-1.5 rounded-full">
+                      <View
+                        className="self-start px-3 py-1.5 rounded-full"
+                        style={{
+                          backgroundColor: getStatusColor(order.status) + "20",
+                        }}
+                      >
                         <Text
                           className="text-xs font-bold"
-                          style={{
-                            backgroundColor:
-                              getStatusColor(order.status) + "20",
-                          }}
+                          style={{ color: getStatusColor(order.status) }}
                         >
                           {capitalizeFirstLetter(order.status)}
                         </Text>
@@ -167,10 +179,10 @@ const OrdersScreen = () => {
                   <View className="border-t border-background-lighter pt-3 flex-row justify-between items-center">
                     <View>
                       <Text className="text-text-secondary text-xs mb-1">
-                        {totalItems}
+                        {totalItems} items
                       </Text>
                       <Text className="font-bold text-primary text-xl">
-                        {order.totalPrice.toFixed(2)}
+                        ${order.totalPrice.toFixed(2)}
                       </Text>
                     </View>
 
@@ -224,39 +236,39 @@ const OrdersScreen = () => {
 
 export default OrdersScreen;
 
-function LoadingUI() {
-  return (
-    <View className="flex-1 items-center justify-center">
-      <ActivityIndicator size="large" color="#00D9FF" />
-      <Text className="text-text-secondary mt-4">Loading orders...</Text>
-    </View>
-  );
-}
+// function LoadingUI() {
+//   return (
+//     <View className="flex-1 items-center justify-center">
+//       <ActivityIndicator size="large" color="#00D9FF" />
+//       <Text className="text-text-secondary mt-4">Loading orders...</Text>
+//     </View>
+//   );
+// }
 
-function ErrorUI() {
-  return (
-    <View className="flex-1 items-center justify-center px-6">
-      <Ionicons name="alert-circle-outline" size={64} color="#FF6B6B" />
-      <Text className="text-text-primary font-semibold text-xl mt-4">
-        Failed to load orders
-      </Text>
-      <Text className="text-text-secondary text-center mt-2">
-        Please check your connection and try again
-      </Text>
-    </View>
-  );
-}
+// function ErrorUI() {
+//   return (
+//     <View className="flex-1 items-center justify-center px-6">
+//       <Ionicons name="alert-circle-outline" size={64} color="#FF6B6B" />
+//       <Text className="text-text-primary font-semibold text-xl mt-4">
+//         Failed to load orders
+//       </Text>
+//       <Text className="text-text-secondary text-center mt-2">
+//         Please check your connection and try again
+//       </Text>
+//     </View>
+//   );
+// }
 
-function EmptyUI() {
-  return (
-    <View className="flex-1 items-center justify-center px-6">
-      <Ionicons name="receipt-outline" size={80} color="#666" />
-      <Text className="text-text-primary font-semibold text-xl mt-4">
-        No orders yet
-      </Text>
-      <Text className="text-text-secondary text-center mt-2">
-        Your order history will appear here
-      </Text>
-    </View>
-  );
-}
+// function EmptyUI() {
+//   return (
+//     <View className="flex-1 items-center justify-center px-6">
+//       <Ionicons name="receipt-outline" size={80} color="#666" />
+//       <Text className="text-text-primary font-semibold text-xl mt-4">
+//         No orders yet
+//       </Text>
+//       <Text className="text-text-secondary text-center mt-2">
+//         Your order history will appear here
+//       </Text>
+//     </View>
+//   );
+// }
