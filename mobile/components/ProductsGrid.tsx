@@ -85,30 +85,34 @@ const ProductsGrid = ({ products, isLoading, isError }: ProductsGridProps) => {
       </View>
 
       {/* PRODUCT INFO */}
-      <View className="p-3">
-        <Text className="text-text-secondary text-xs mb-1">
-          {product.category}
-        </Text>
-        <Text
-          className="text-text-primary font-bold text-sm mb-2"
-          numberOfLines={2}
-        >
-          {product.name}
-        </Text>
+      <View className="p-4 flex-1 justify-between">
+        {/* TOP CONTENT */}
+        <View>
+          <Text className="text-text-secondary text-xs mb-1">
+            {product.category}
+          </Text>
+          <Text
+            className="text-text-primary font-bold text-sm mb-2 h-10"
+            numberOfLines={2}
+          >
+            {product.name}
+          </Text>
 
-        {/* PRODUCT RATING */}
-        <View className="flex-row">
-          <Ionicons name="star" size={12} color={"#FFC107"} />
-          <Text className="text-text-primary text-xs font-semibold ml-1">
-            {product.averageRating.toFixed(1)}
-          </Text>
-          <Text className="text-text-secondary text-xs ml-1">
-            ({product.totalReviews})
-          </Text>
+          {/* PRODUCT RATING */}
+          <View className="flex-row">
+            <Ionicons name="star" size={12} color={"#FFC107"} />
+            <Text className="text-text-primary text-xs font-semibold ml-1">
+              {product.averageRating.toFixed(1)}
+            </Text>
+            <Text className="text-text-secondary text-xs ml-1">
+              ({product.totalReviews})
+            </Text>
+          </View>
         </View>
 
         {/* PRODUCT PRICE */}
         <View className="flex-row items-center justify-between">
+          {/* BOTTOM CONTENT */}
           <Text className="text-primary font-bold text-lg">
             ${product.price.toFixed(2)}
           </Text>
