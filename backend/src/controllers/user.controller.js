@@ -217,7 +217,7 @@ export async function editUserProfile(req, res) {
 
     res.status(200).json({
       message: "Profile updated successfully",
-      user,
+      user: { name: user.name },
     });
   } catch (error) {
     console.error("Update profile error:", error);
