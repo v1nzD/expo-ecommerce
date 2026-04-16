@@ -40,9 +40,9 @@ const ShopScreen = () => {
 
     // filter by search query
     if (searchQuery.trim()) {
-      filtered = filtered.filter((product) => {
-        product.name.toLowerCase().includes(searchQuery.toLowerCase());
-      });
+      filtered = filtered.filter((product) =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
     }
 
     return filtered;
