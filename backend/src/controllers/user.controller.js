@@ -183,3 +183,44 @@ export async function getWishlist(req, res) {
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export async function getUserInfo(req, res) {
+  try {
+    const user = req.user;
+
+    return res.status(200).json({
+      user: {
+        name: user.name,
+        email: user.email,
+        imageUrl: user.imageUrl,
+      },
+    });
+  } catch (error) {
+    console.error("Get user info error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+export async function editUserProfile(req, res) {
+  try {
+    const { name } = req.body;
+
+    const user = req.user;
+
+    if (!name || name.trim() === "") {
+      return res.status(400).json({ error: "Name is required" });
+    }
+
+    user.name = name.trim();
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+      user,
+    });
+  } catch (error) {
+    console.error("Update profile error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
