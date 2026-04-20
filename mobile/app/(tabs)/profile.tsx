@@ -4,6 +4,8 @@ import { useAuth, useUser } from "@clerk/expo";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import useProfile from "@/hooks/useProfile";
+import { useState } from "react";
 
 const MENU_ITEMS = [
   {
@@ -11,7 +13,7 @@ const MENU_ITEMS = [
     icon: "person-outline",
     title: "Edit Profile",
     color: "#3B82F6",
-    action: "/profile",
+    action: "/editProfile",
   },
   {
     id: 2,
@@ -39,13 +41,14 @@ const MENU_ITEMS = [
 const ProfileScreen = () => {
   const { signOut } = useAuth();
   const { user } = useUser();
+  const { userInfo } = useProfile();
+
+  const [imageError, setImageError] = useState(false);
 
   const handleMenuPress = (action: (typeof MENU_ITEMS)[number]["action"]) => {
-    if (action === "/profile") return; // edit profile not included yet
-
-    // else scenario:
     router.push(action); // redirect user to the page
   };
+
   return (
     <SafeScreen>
       <ScrollView
@@ -59,9 +62,14 @@ const ProfileScreen = () => {
             <View className="flex-row items-center">
               <View className="relative">
                 <Image
-                  source={user?.imageUrl}
+                  source={
+                    userInfo?.imageUrl && !imageError
+                      ? { uri: userInfo.imageUrl }
+                      : require("../../assets/images/profile_avatar.png")
+                  }
                   style={{ width: 80, height: 80, borderRadius: 40 }}
                   transition={200}
+                  onError={() => setImageError(true)}
                 />
                 <View className="absolute -bottom-1 -right-1 bg-primary rounded-full size-7 items-center justify-center border-2 border-surface">
                   <Ionicons name="checkmark" size={16} color="#121212" />
@@ -71,7 +79,8 @@ const ProfileScreen = () => {
               {/* PROFILE INFO */}
               <View className="flex-1 ml-4">
                 <Text className="text-text-primary text-2xl font-bold mb-1">
-                  {user?.firstName} {user?.lastName}
+                  {/* {user?.firstName} {user?.lastName} */}
+                  {userInfo?.name}
                 </Text>
                 <Text className="text-text-secondary text-sm">
                   {user?.emailAddresses?.[0]?.emailAddress || "No email"}

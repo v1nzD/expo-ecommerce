@@ -189,7 +189,7 @@ export async function getUserInfo(req, res) {
     const user = req.user;
 
     return res.status(200).json({
-      user: { name: user.name },
+      user: { name: user.name, imageUrl: user.imageUrl || null },
     });
   } catch (error) {
     console.error("Get user info error:", error);
@@ -208,10 +208,6 @@ export async function editUserProfile(req, res) {
     }
 
     user.name = name.trim();
-
-    // if (imageUrl) {
-    //   user.imageUrl = imageUrl;
-    // }
 
     await user.save();
 
