@@ -173,15 +173,11 @@ const ProductsPage = () => {
                           {product.category}
                         </p>
                       </div>
-
-                      <div className={`badge ${status.class}`}>
-                        {status.text}
-                      </div>
                     </div>
 
                     <div className="flex items-center gap-6 mt-4">
                       <div>
-                        <p className="text-xs text-base-content/7-">Price</p>
+                        <p className="text-xs text-base-content/70">Price</p>
                         <p className="font-bold text-lg">${product.price}</p>
                       </div>
 
@@ -194,26 +190,30 @@ const ProductsPage = () => {
                     </div>
                   </div>
 
-                  {/* PRODUCTS CARD BUTTONS */}
-                  <div className="card-actions">
-                    <button
-                      className="btn btn-square btn-ghost"
-                      onClick={() => handleEdit(product)}
-                    >
-                      <PencilIcon className="w-5 h-5" />
-                    </button>
-                    <button
-                      className="btn btn-square btn-ghost text-error"
-                      onClick={() =>
-                        deleteProductMutation.mutate({ id: product._id })
-                      }
-                    >
-                      {deleteProductMutation.isPending ? (
-                        <span className="loading loading-spinner"></span>
-                      ) : (
-                        <Trash2Icon className="w-5 h-5" />
-                      )}
-                    </button>
+                  <div className="flex items-center gap-2">
+                    <div className={`badge ${status.class}`}>{status.text}</div>
+
+                    {/* PRODUCTS CARD BUTTONS */}
+                    <div className="card-actions">
+                      <button
+                        className="btn btn-square btn-ghost"
+                        onClick={() => handleEdit(product)}
+                      >
+                        <PencilIcon className="w-5 h-5" />
+                      </button>
+                      <button
+                        className="btn btn-square btn-ghost text-error"
+                        onClick={() =>
+                          deleteProductMutation.mutate({ id: product._id })
+                        }
+                      >
+                        {deleteProductMutation.isPending ? (
+                          <span className="loading loading-spinner"></span>
+                        ) : (
+                          <Trash2Icon className="w-5 h-5" />
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
