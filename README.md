@@ -4,9 +4,9 @@ A production-grade full-stack e-commerce system featuring a cross-platform mobil
 
 ## Demo
 
-Admin dashboard: https://youtu.be/1WndrCsXcJ8 
+**Admin dashboard: https://youtu.be/S3WH43wL3tA** 
 
-Mobile: https://youtube.com/shorts/BaIMuuqun2s
+**Mobile: https://youtube.com/shorts/BaIMuuqun2s**
 ---
 
 ## Overview
