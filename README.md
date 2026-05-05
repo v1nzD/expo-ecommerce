@@ -3,7 +3,8 @@
 A production-grade full-stack e-commerce system featuring a cross-platform mobile client, web-based admin dashboard, and scalable backend API — all deployed and integrated with modern tooling.
 
 ## Demo
-Admin dashboard: https://youtu.be/1WndrCsXcJ8
+
+Admin dashboard: https://youtu.be/1WndrCsXcJ8 
 
 Mobile: https://youtube.com/shorts/BaIMuuqun2s
 ---
